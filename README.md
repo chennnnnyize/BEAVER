@@ -22,6 +22,7 @@ We refer to the implementation from [PGMORL](https://github.com/mit-gfx/PGMORL.g
 
 If you find our paper or code is useful, please consider citing:
 
+```bibtex
 @inproceedings{liu2025beaver,
   title={BEAVER: Building Environments with Assessable Variation for Evaluating Multi-Objective Reinforcement Learning},
   author={Liu, Ruohong and Umenberger, Jack and Chen, Yize},
