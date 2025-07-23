@@ -11,3 +11,19 @@ Contact: yize.chen@ualberta.ca
 
 ![BEAVER Framework](https://github.com/chennnnnyize/BEAVER/blob/main/building_1.png)
 
+# Basic Usage
+To run our algorithm on Building-3d for a single run:
+```bash
+python scripts/building-dr-3d.py --cmorl-ipo --num-seeds 1
+```
+
+# Reference
+We refer to the implementation from [PGMORL](https://github.com/mit-gfx/PGMORL.git) as a base for part of our code.
+
+If you find our paper or code is useful, please consider citing:
+@inproceedings{liu2025beaver,
+  title={BEAVER: Building Environments with Assessable Variation for Evaluating Multi-Objective Reinforcement Learning},
+  author={Liu, Ruohong and Umenberger, Jack and Chen, Yize},
+  booktitle={ICML 2025 CO-BUILD Workshop on Computational Optimization of Buildings}
+}
+
