@@ -288,6 +288,35 @@ def Nfind_neighbor(roomnum,Layerall,U_Wall,SpecificHeat_avg):
             dicRoom[cordall[j][0]]=[cordall[i][11]]
   return dicRoom,Rtable,Ctable,Windowtable
 
+def compute_RC_tables(U_Wall, roomnum, building_structure, full_occ=0, AC_map=1, max_power=8000, shgc=0.252, shgc_weight=0.01, ground_weight=0.5):
+    Layerall = building_structure['Layerall']
+    buildall = building_structure['buildall']
+    SpecificHeat_avg = building_structure['SpecificHeat_avg']
+
+    dicRoom, Rtable, Ctable, Windowtable = Nfind_neighbor(roomnum, Layerall, U_Wall, SpecificHeat_avg)
+
+    connectmap = np.zeros((roomnum, roomnum + 1))
+    RCtable = Rtable / np.array([Ctable]).T
+
+    ground_connectlist = np.zeros((roomnum, 1))
+    for room in Layerall[0]:
+        ground_connectlist[room[11]] = room[8] * U_Wall[5] * ground_weight
+
+    for i in range(len(buildall)):
+        for number in dicRoom[buildall[i][0]]:
+            connectmap[i][number] = 1
+
+    people_full = np.zeros((roomnum, 1)) + full_occ
+    ACweight = np.diag(np.zeros(roomnum) + AC_map) * max_power
+    SHGC = shgc * shgc_weight
+    weightcmap = np.concatenate(
+        (people_full, ground_connectlist, np.zeros((roomnum, 1)), ACweight, np.array([Windowtable * SHGC]).T),
+        axis=-1
+    ) / np.array([Ctable]).T
+
+    nonlinear = people_full / np.array([Ctable]).T
+
+    return RCtable, connectmap, weightcmap, nonlinear
 
 
 
@@ -472,6 +501,13 @@ def ParameterGenerator(Building,Weather,Location,U_Wall=0,Ground_Tp=[0,0,0,0,0,0
     Parameter['spacetype'] = spacetype
     Parameter['CarbonIntensity'] = carbonintensity
     Parameter['ElectricityPrice'] = electricityprice
+    Parameter['U_Wall'] = U_Wall
+    Parameter['building_structure'] = {
+        'Layerall': Layerall,
+        'buildall': buildall,
+        'SpecificHeat_avg': SpecificHeat_avg
+    }
+
 
     return Parameter
 
