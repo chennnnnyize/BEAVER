@@ -47,4 +47,28 @@ for i in range(args.num_seeds):
             print("CMORL-IPO execution failed")
             break
 
+    if test_cmorl_cpo:
+        cmd = f'python morl/run.py '\
+            f'--env-name building_3d --obj-num 3 '\
+            f'--seed {seed} '\
+            f'--num-time-steps 2000000 '\
+            f'--num-init-steps 1500000 '\
+            f'--ref-point 0 0 0 '\
+            f'--min-weight 0.0 '\
+            f'--max-weight 1.0 '\
+            f'--delta-weight 0.25 '\
+            f'--eval-num 1 '\
+            f'--num-select 9 '\
+            f'--update-method cmorl-cpo '\
+            f'--obj-rms '\
+            f'--ob-rms '\
+            f'--raw '\
+            f'--save-dir {save_dir}/cmorl-cpo/{i}/'
+        
+        print("Running CMORL-CPO")
+        ret_code = os.system(cmd)
+        if ret_code != 0:
+            print("CMORL-CPO execution failed")
+            break
+
 print("All executions completed")

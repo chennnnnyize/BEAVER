@@ -15,7 +15,8 @@ from baselines.common.vec_env.vec_normalize import \
 
 import mo_gymnasium as mo_gym
 
-from environments.building.env_building import BuildingEnv_3d, BuildingEnv_9d
+from environments.building.env_building import BuildingEnv_2d, BuildingEnv_3d, BuildingEnv_9d
+from environments.building.env_dynamic_building import BuildingEnv_DR_2d, BuildingEnv_DR_3d, BuildingEnv_DR_9d
 from environments.building.utils_building import ParameterGenerator
 
 try:
@@ -40,12 +41,24 @@ def make_env(env_id, seed, rank, log_dir, allow_early_resets, cost_objective, en
             _, domain, task = env_id.split('.')
             env = dm_control2gym.make(domain_name=domain, task_name=task)
         else:
-            if env_id == 'building_3d':
+            if env_id == 'building_2d':
+                params = ParameterGenerator(Building='OfficeLarge', Weather='Warm_Marine', Location='ElPaso')
+                env = BuildingEnv_2d(params)
+            elif env_id == 'building_3d':
                 params = ParameterGenerator(Building='OfficeLarge', Weather='Warm_Marine', Location='ElPaso')
                 env = BuildingEnv_3d(params)
             elif env_id == 'building_9d':
                 params = ParameterGenerator(Building='OfficeLarge', Weather='Warm_Marine', Location='ElPaso')
                 env = BuildingEnv_9d(params)
+            elif env_id == 'building_dr_2d':
+                params = ParameterGenerator(Building='OfficeLarge', Weather='Warm_Marine', Location='ElPaso')
+                env = BuildingEnv_DR_2d(params)
+            elif env_id == 'building_dr_3d':
+                params = ParameterGenerator(Building='OfficeLarge', Weather='Warm_Marine', Location='ElPaso')
+                env = BuildingEnv_DR_3d(params)
+            elif env_id == 'building_dr_9d':
+                params = ParameterGenerator(Building='OfficeLarge', Weather='Warm_Marine', Location='ElPaso')
+                env = BuildingEnv_DR_9d(params)
             else:
                 if cost_objective:
                     env = mo_gym.make(env_id, cost_objective=True, max_episode_steps=500)
